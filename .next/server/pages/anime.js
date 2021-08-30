@@ -118,7 +118,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_AnimeDataService__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/AnimeDataService */ "./services/AnimeDataService.jsx");
 
 
-var _jsxFileName = "C:\\PROJETOS\\TESTE\\FRONTEND\\primereact-nextjs-quickstart\\pages\\anime\\index.jsx";
+var _jsxFileName = "D:\\PROJETOS\\PrototypeSystemFrontend\\pages\\anime\\index.jsx";
 
 
 
