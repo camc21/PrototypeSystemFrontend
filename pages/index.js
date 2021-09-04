@@ -1,14 +1,9 @@
+import React from 'react';
 
-
-import React, { useState, useRef, useEffect } from 'react';
-import Login from '../pages/login'
-
-const Index = () => {
-        return(
-            <>
-                <Login />
-            </>
-        )
+function Index (props) {
+    return (
+        <h1>HOME PAGE</h1>
+    )
 }
 
-export default Index;
+export default(Index)

@@ -14,15 +14,14 @@ export const LoginDataService = {
     return axios.post(baseUrl+'/auth/signin', data, {})
   }
 
-  function logOut(){
+  function logOut() {
     const router = useRouter();
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
     router.push('/')
   }
 
-  function isLogged(){
-    const user = localStorage.getItem('token');
-    if(user){
+  function isLogged() {
+    if(localStorage.getItem('accessToken') !== null && localStorage.getItem('accessToken') !== undefined){
       return true;
     }
     return false;

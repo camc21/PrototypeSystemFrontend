@@ -8,15 +8,14 @@ export const AnimeDataService = {
 };
 
 function listarAnimes() {
-  console.log('listar anime service')
-  return axios.get('http://localhost:8081/api/anime', {
-    headers: { "Authorization": localStorage.getItem("token") }
+  return axios.get(baseUrl, {
+    headers: { "Authorization": localStorage.getItem('accessToken') }
     })
 }
 
 function listarAnimesPorId(id) {
-  return axios.get(`http://localhost:8081/api/anime/${id}`, {
-    headers: { "Authorization": localStorage.getItem("token") }
+  return axios.get(`${baseUrl}/${id}`, {
+    headers: { "Authorization": localStorage.getItem('accessToken') }
   })
 }
  

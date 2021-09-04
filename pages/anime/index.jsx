@@ -6,13 +6,12 @@ import { Column } from 'primereact/column';
 import { Fieldset } from 'primereact/fieldset';
 
 import { AnimeDataService } from '../../services/AnimeDataService';
+import withAuth from '../../components/withAuth';
 
-
-export default function Anime(props) {
+function Anime(props) {
 
     const [listaAnimes, setListaAnimes] = useState([]);
     const [animeSelecionado, setAnimeSelecionado] = useState({});
-
 
     useEffect(() => {
         listarAnimes();
@@ -20,14 +19,17 @@ export default function Anime(props) {
 
     function listarAnimes(){
         AnimeDataService.listarAnimes().then(response => {
-            console.log(response.data);
-            setListaAnimes(response.data);
+            try {
+                setListaAnimes(response.data);
+            } catch (error) {
+                console.log(response.data);
+            }
+            
         })
     }
 
     function listarAnimesPorId(idAnime){
         AnimeDataService.listarAnimesPorId(idAnime).then(response => {
-            console.log(response.data);
             setAnimeSelecionado(response.data);
         })
     }
@@ -61,3 +63,5 @@ export default function Anime(props) {
         </>
     )
 }
+
+export default withAuth(Anime);

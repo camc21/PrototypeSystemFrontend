@@ -1,6 +1,7 @@
 //imports api
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from "react-redux";
 
 //imports styles
 import styles from '../../styles/login.module.css'
@@ -10,28 +11,49 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import {
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+  } from "@chakra-ui/react"
 
-//services
+//imports services
 import { LoginDataService } from '../../services/LoginDataService';
 
+//actions
+import { showButtonLoginLogoutAction } from '../../store/actions/login_logout';
 
-export default function Login(props) {
 
-    const baseUrl = `http://localhost:3000`;
-    const router = useRouter();
+function Login(props) {
+
+    const dispatch = useDispatch();
+
+    const router = useRouter()
 
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [loadingCredentials, setLoadingCredentials] = useState(false);
 
-    function logIn(){
+    const logIn = (e) => {
+        e.preventDefault()
         setLoadingCredentials(true);
         LoginDataService.logIn(login, password).then(response => {
-            localStorage.setItem('token','Bearer ' + response.data.token);
-            setLoadingCredentials(false);
-            router.push(baseUrl+'/anime')
-        })
-    }
+            if(response.data === "UNAUTHORIZED"){
+                router.push('/');
+                <Alert status="warning">
+                    <AlertIcon />
+                    Usuário ou senha incorretos
+                </Alert>
+            } else {
+                localStorage.setItem('accessToken', 'Bearer ' + response.data.token);
+                setLoadingCredentials(false);
+                dispatch(showButtonLoginLogoutAction(false));
+                router.push('/');
+                console.log(response);
+            }
+        });
+      }
 
     return(
         <div className={styles.layout_login}>
@@ -42,12 +64,14 @@ export default function Login(props) {
                 <h5>Senha</h5>
                 <Password className={styles.password} value={password} onChange={(e) => setPassword(e.target.value)} toggleMask />
 
-                <Button label="Login" onClick={() => logIn()} />
+                <Button label="Login" onClick={logIn} />
                 {loadingCredentials &&
-                    <ProgressSpinner style={{width: '50px', height: '50px'}} strokeWidth="8" fill="#EEEEEE" animationDuration=".5s"/>
+                    <ProgressSpinner />
                 }
                 
             </div>
         </div>
     )
 }
+
+export default(Login)
