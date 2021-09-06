@@ -12,22 +12,16 @@ import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import 'bootstrap/dist/css/bootstrap.css'
 
-import { ChakraProvider } from "@chakra-ui/react"
-
-
 
 function App({ Component, pageProps }) {
 
     return (
         <>
-            <ChakraProvider>
-                <Header />
-                <Content>
-                    <Component {...pageProps} />
-                </Content>
-                <Footer />
-            </ChakraProvider>
-           
+            <Header />
+            <Content>
+                <Component {...pageProps} />
+            </Content>
+            <Footer />
         </>
     )
   }

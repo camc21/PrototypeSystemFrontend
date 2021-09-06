@@ -1,8 +1,15 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-// import verifyToken from "services/verifyToken";
+import { LoginDataService } from "../services/LoginDataService";
+import { useSelector, useDispatch } from "react-redux";
+
+function showButtonLoginAction(){
+  const dispatch = useDispatch();
+  dispatch(showButtonLoginAction(true));
+}
 
 const withAuth = (WrappedComponent) => {
+
   return (props) => {
     const Router = useRouter();
     const [verified, setVerified] = useState(false);
@@ -16,16 +23,20 @@ const withAuth = (WrappedComponent) => {
       if (!accessToken) {
         Router.replace("/");
       } else {
-        // we call the api that verifies the token.
-        const data = {verified: true}; /*await verifyToken(accessToken);*/
-        // if token was verified we set the state.
-        if (data.verified) {
-          setVerified(data.verified);
-        } else {
-          // If the token was fraud we first remove it from localStorage and then redirect to "/"
-          localStorage.removeItem("accessToken");
-          Router.replace("/");
-        }
+        LoginDataService.validateToken().then(response => {
+          console.log(response.data);
+          // we call the api that verifies the token.
+          const data = {verified: response.data}; /*await verifyToken(accessToken);*/
+          // if token was verified we set the state.
+          if (data.verified) {
+            setVerified(data.verified);
+          } else {
+            // If the token was fraud we first remove it from localStorage and then redirect to "/"
+            localStorage.removeItem("accessToken");
+            showButtonLoginAction();
+            Router.replace("/");
+          }
+        })
       }
     }, []);
 

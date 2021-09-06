@@ -29,6 +29,7 @@
     "react-redux": "^7.2.4",
     "react-spring": "^9.2.4",
     "react-transition-group": "^4.4.1",
+    "reactstrap": "^8.10.0",
     "redux-devtools-extension": "^2.13.9",
     "rsuite": "^4.10.2"
   }

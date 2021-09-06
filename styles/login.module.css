@@ -2,9 +2,15 @@
     display: flex;
     width: 100%;
     height: 100%;
-    justify-content: center;
-    align-self: center;
+    flex-direction: column;
     background-color: #000;
+}
+
+.layout_login_no_messages {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
 }
 
 .box_login {
@@ -12,9 +18,17 @@
     flex-direction: column;
     align-self: center;
     align-items: center;
-    width: 350px;
+    width: 450px;
     height: 350px;
     background-color: #D8D8D8;
+}
+
+.box_messages {
+    width: 100%;
+    height: 80px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 
 .password {

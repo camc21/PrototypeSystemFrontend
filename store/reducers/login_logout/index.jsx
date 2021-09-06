@@ -1,18 +1,18 @@
 import { HYDRATE } from "next-redux-wrapper";
-import { SHOW_BUTTON_LOGIN_LOGOUT } from "../../actions";
+import { SHOW_BUTTON_LOGIN } from "../../actions";
 
 const initialState = {
-  showLoginLogout: true,
+  showLogin: true,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case HYDRATE:
       return { ...state, ...action.payload };
-    case SHOW_BUTTON_LOGIN_LOGOUT:
+    case SHOW_BUTTON_LOGIN:
         return {
           ...state,
-          showLoginLogout: action.payload
+          showLogin: action.payload
         }
     default:
       return state;

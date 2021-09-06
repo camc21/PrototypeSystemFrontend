@@ -1,6 +1,6 @@
-import { SHOW_BUTTON_LOGIN_LOGOUT } from "./../../actions";
+import { SHOW_BUTTON_LOGIN } from "./../../actions";
 
-export const showButtonLoginLogoutAction = payload => ({
-  type: SHOW_BUTTON_LOGIN_LOGOUT,
+export const showButtonLoginAction = payload => ({
+  type: SHOW_BUTTON_LOGIN,
   payload
 });

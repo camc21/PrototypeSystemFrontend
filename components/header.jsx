@@ -11,7 +11,7 @@ import styles from '../styles/header.module.css';
 import { LoginDataService } from '../services/LoginDataService';
 
 //actions
-import { showButtonLoginLogoutAction } from '../store/actions/login_logout';
+import { showButtonLoginAction } from '../store/actions/login_logout';
 
 
 export default function Header(props) {
@@ -20,31 +20,37 @@ export default function Header(props) {
 
     const dispatch = useDispatch();
 
-    const showLoginLogout = useSelector((state) => state.showLoginLogoutReducer.showLoginLogout);
+    const showLogin = useSelector((state) => state.showLoginReducer.showLogin);
 
-    const logIn = () => {
+    useEffect(() => {
+        if(localStorage.getItem('accessToken') !== null) {
+            dispatch(showButtonLoginAction(false));
+        } 
+    }, [])
+
+    function logIn() {
         router.push('/login')
     }
 
-    const logOut = () =>{
-        dispatch(showButtonLoginLogoutAction(true));
+    function logOut() {
+        dispatch(showButtonLoginAction(true));
         localStorage.removeItem('accessToken');
     }
 
     return(
         <>
             <header className={styles.header}>
-                <div style={{display: 'flex', height: '100%', justifyContent: 'flex-end', alignItems: 'center'}}>
+                <div className={styles.bar_header}>
                     {
-                        showLoginLogout &&
+                        showLogin &&
                         <Link href="/login">
-                            <a style={{marginRight: '10px'}} onClick={logIn}>Login</a>
+                            <a style={{marginRight: '10px', marginBottom: '5px'}} onClick={logIn}>Login</a>
                         </Link>
                     }
                     {
-                        !showLoginLogout &&
+                        !showLogin &&
                         <Link href="/">
-                            <a style={{marginRight: '10px'}} onClick={logOut}>Logout</a>
+                            <a style={{marginRight: '10px', marginBottom: '5px'}} onClick={logOut}>Logout</a>
                         </Link>
                     }
                 </div>
