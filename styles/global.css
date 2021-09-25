@@ -235,11 +235,11 @@ Media Queries
 /* System colors*/
 /*Right menu background*/
 .nav-menu.right {
-  background: #222;
+  background: #2F4F4F;
 }
 /*Main menu background*/
 .nav-menu.left {
-  background: #222;
+  background: #2F4F4F;
 }
 /*Menu hint number*/
 .nav-menu a span {
