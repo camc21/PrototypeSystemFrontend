@@ -13,6 +13,7 @@ import { LoginDataService } from '../services/LoginDataService';
 //actions
 import { showButtonLoginAction } from '../store/actions/login_logout';
 
+import Navbar from '../components/navbar';
 
 export default function Header(props) {
 
@@ -39,7 +40,11 @@ export default function Header(props) {
 
     return(
         <>
-            <header className={styles.header}>
+        <header className={styles.header}>
+            <Navbar />
+        </header>
+            
+            {/* <header className={styles.header}>
                 <div className={styles.bar_header}>
                     {
                         showLogin &&
@@ -54,7 +59,7 @@ export default function Header(props) {
                         </Link>
                     }
                 </div>
-            </header>
+            </header> */}
         </>
     )
 }
