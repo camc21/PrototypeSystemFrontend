@@ -1,96 +1,120 @@
 import {React, useState, useEffect } from 'react';
+import Link from 'next/link'
+import { useSelector, useDispatch } from "react-redux";
 
 //styles
 // import '../styles/navbar.css';
 
 import Icon from '@mdi/react'
 import { mdiAccountCircle } from '@mdi/js';
-import { mdiMenu } from '@mdi/js';
+import { mdiLogin } from '@mdi/js';
+import { mdiLogout } from '@mdi/js';
+import { mdiAccountGroup } from '@mdi/js';
+import { mdiFolderKey } from '@mdi/js';
 
-import {Checkbox} from 'primereact/checkbox';
+
+//styles
+import styles from '../styles/header.module.css';
+
+//services
+import { LoginDataService } from '../services/LoginDataService';
+
+//actions
+import { showButtonLoginAction } from '../store/actions/login_logout';
+
+import { useRouter } from 'next/router'
+
+
+
 
 export default function Navbar(props) {
 
   const [checkBoxMenuEsquerda, setCheckBoxMenuEsquerda] = useState(false);
   const [checkBoxMenuDireita, setCheckBoxMenuDireita] = useState(false);
 
+  const router = useRouter()
+
+  const dispatch = useDispatch();
+
+  const showLogin = useSelector((state) => state.showLoginReducer.showLogin);
+
+  useEffect(() => {
+      if(localStorage.getItem('accessToken') !== null) {
+          dispatch(showButtonLoginAction(false));
+      }
+  }, [])
+
+  function logIn() {
+    router.push('/login')
+  }
+
+  function logOut() {
+      dispatch(showButtonLoginAction(true));
+      localStorage.removeItem('accessToken');
+  }
+
   return (
     <>
       <nav>
         <div>
           <input type="checkbox" id="menu-left" />
-          <label for="menu-left"  class="menu-bt left"></label>
-          <div class="nav-menu left">
-            <div class="menu-scroll">
-              <h5>início</h5>
-              <a href="">
-              <Icon path={mdiAccountCircle}
-                title="User Profile"
+          <label htmlFor="menu-left"  className="menu-bt left"></label>
+          <div className="nav-menu left">
+            <div className="menu-scroll">
+              <h5>Administrativo</h5>
+              {/* <a style={{marginBottom: '5px'}} href="" className="active">
+              <Icon path={mdiAccountGroup}
+                title="Usuários"
                 size={1}
                 color="#4682B4"
               />
-                Recibos/Acordos em Aberto<span>3</span>
+                Usuários
               </a>
-              <a href="" class="active">
-                <Icon path={mdiAccountCircle}
-                  title="User Profile"
+              <a style={{marginBottom: '5px'}} href="" className="active">
+                <Icon path={mdiFolderKey}
+                  title="Perfis de Acesso"
                   size={1}
                   color="#4682B4"
                 />
-                Diário da Portaria
-              </a>
-
-              <h5>Portaria</h5>
-              <a href="">
-                <Icon path={mdiAccountCircle}
-                  title="User Profile"
-                  size={1}
-                  color="#4682B4"
-                />
-                Consulta de Ocorrências
-              </a>
+                Perfis de Acesso
+              </a> */}
             </div>
           </div>
         </div>
 
-        <h1>Pure CSS - Navbar left and right</h1>
+        <h1>Prototype System Frontend</h1>
 
         <div>
           <input type="checkbox" id="menu-right" />
-          <label for="menu-right" class="menu-bt right" /> 
-          <div class="nav-menu right">
-            <div class="menu-scroll">
-              <h5>usuários e perfis</h5>
-              <a href="">
+          <label htmlFor="menu-right" className="menu-bt right" />
+          <div className="nav-menu right">
+            <div className="menu-scroll">
+              <h5>Meus Dados</h5>
+              {/* <a style={{marginBottom: '5px'}} href="" className="active">
                 <Icon path={mdiAccountCircle}
-                  title="User Profile"
+                  title="Usuário"
                   size={1}
                   color="#4682B4"
                 />
-                Perfis
-              </a>
-              <a href="" class="active">
-                <Icon path={mdiAccountCircle}
-                  title="User Profile"
-                  size={1}
-                  color="#4682B4"
-                />
-                Usuários
-              </a>
-
-              <h5>sistema</h5>
-              <a href="">
-                <Icon path={mdiAccountCircle}
-                  title="User Profile"
-                  size={1}
-                  color="#4682B4"
-                />
-                Novo Aviso
-              </a>
+                Usuário
+              </a> */}
+              {
+                showLogin &&
+                <Link href="/login">
+                  <a onClick={logIn}>Login</a>
+                </Link>
+              }
+            
+              {
+                !showLogin &&
+                <Link href="/">
+                  <a onClick={logOut}>Logout</a>
+                </Link>
+              }
             </div>
           </div>
         </div>
-  
+
       </nav>
     </>
   )

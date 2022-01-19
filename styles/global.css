@@ -247,11 +247,11 @@ Media Queries
 }
 /*Menu active item - main menu*/
 .nav-menu.left a.active {
-  background-color: #4285f4;
+  background-color: #008080;
 }
 /*Menu active item - right menu*/
 .nav-menu.right a.active {
-  background-color: #f2a900;
+  background-color: #008080;
 }
 
 
