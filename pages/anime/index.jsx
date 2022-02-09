@@ -33,21 +33,16 @@ function Anime(props) {
 
     useEffect(() => {
         listarAnimes();
-    }, [listaAnimes])
+    }, [])
 
     function listarAnimes(){
         AnimeDataService.listarAnimes().then(response => {
+            console.log(response.data);
             try {
                 setListaAnimes(response.data.animes);
             } catch (error) {
                 console.log(response.data);
             }
-        })
-    }
-
-    function listarAnimesPorId(idAnime){
-        AnimeDataService.listarAnimesPorId(idAnime).then(response => {
-            setAnimeSelecionado(response.data);
         })
     }
 
@@ -57,12 +52,13 @@ function Anime(props) {
     }
 
     const editar = (rowData) => {
+        console.log(rowData);
         setAnimeSelecionado(rowData);
         dispatch(loadSelectedDataAction(rowData));
     }
 
     const _delete = (rowData) => {
-        AnimeDataService._delete(rowData.idAnime).then(response => {
+        AnimeDataService._delete(rowData.id).then(response => {
         toast.current.show({severity:'success', summary: 'Sucesso', detail:'Anime ' + rowData.nome + ' excluído com sucesso!', life: 3000});
         })
     }
@@ -100,7 +96,7 @@ function Anime(props) {
                     selectionMode="single"
                     selection={animeSelecionado}
                     onSelectionChange={e => {setAnimeSelecionado(e.value)}}
-                    dataKey="idAnime">
+                    dataKey="id">
                     <Column field="nome" header="Nome"></Column>
                     <Column field="temporada" header="Temporada"></Column>
                     <Column field={e => possuiManga(e.possuiManga)} header="Possui mangá ?"></Column>

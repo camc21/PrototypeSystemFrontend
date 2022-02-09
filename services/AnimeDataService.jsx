@@ -29,7 +29,7 @@ function _post(anime){
 }
 
 function _put(anime){
-  return axios.post(`${baseUrl}`, anime, {
+  return axios.put(`${baseUrl}`, anime, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   })
 }
