@@ -5,7 +5,9 @@ const baseUrl = 'http://localhost:8081/api/anime';
 export const AnimeDataService = {
   listarAnimes,
   listarAnimesPorId,
-  save,
+  _post,
+  _put,
+  _delete
 };
 
 function listarAnimes() {
@@ -20,8 +22,20 @@ function listarAnimesPorId(id) {
   });
 }
 
-function save(anime){
+function _post(anime){
   return axios.post(`${baseUrl}`, anime, {
+    headers: { "Authorization": localStorage.getItem('accessToken') }
+  })
+}
+
+function _put(anime){
+  return axios.post(`${baseUrl}`, anime, {
+    headers: { "Authorization": localStorage.getItem('accessToken') }
+  })
+}
+
+function _delete(id) {
+  return axios.delete(`${baseUrl}/${id}`, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   })
 }
