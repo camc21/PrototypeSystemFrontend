@@ -23,26 +23,24 @@ function Anime(props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-      return () => {
-        console.log('Foi desmontado');
-        setListaAnimes(null);
-        setAnimeSelecionado(null);
-      };
+        return () => {
+            console.log('Foi desmontado');
+            setListaAnimes(null);
+            setAnimeSelecionado(null);
+        };
     }, []);
-    
+
 
     useEffect(() => {
         listarAnimes();
     }, [])
 
-    function listarAnimes(){
+    function listarAnimes() {
         AnimeDataService.listarAnimes().then(response => {
-            console.log(response.data);
-            try {
-                setListaAnimes(response.data.animes);
-            } catch (error) {
-                console.log(response.data);
-            }
+        setListaAnimes(response.data.animes);
+        }).catch(error => {
+            console.log(error.response.data)
+            toast.current.show({ severity: 'warn', summary: 'Aviso', detail: error.response.data.message, life: 3000 });
         })
     }
 
@@ -59,54 +57,54 @@ function Anime(props) {
 
     const _delete = (rowData) => {
         AnimeDataService._delete(rowData.id).then(response => {
-        toast.current.show({severity:'success', summary: 'Sucesso', detail:'Anime ' + rowData.nome + ' excluído com sucesso!', life: 3000});
+            toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Anime ' + rowData.nome + ' excluído com sucesso!', life: 3000 });
         })
     }
 
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-            <Link href="/anime/form">
-                <Button style={{marginRight: '10px'}} icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editar(rowData)} />
-            </Link>
+                <Link href="/anime/form">
+                    <Button style={{ marginRight: '10px' }} icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editar(rowData)} />
+                </Link>
 
-            <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => _delete(rowData)} />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => _delete(rowData)} />
             </>
         );
     }
 
     const possuiManga = (atributte) => {
-        if(atributte){
+        if (atributte) {
             return 'Possui Mangá';
         } return 'Não Possui Mangá';
     }
 
-    return(
+    return (
         <>
             <Toast ref={toast} />
             <Fieldset legend="Anime">
-              
+
                 <Link href="/anime/form">
                     <Button id='new-button' label="Novo" onClick={() => novo({})} />
                 </Link>
 
-                <DataTable 
-                    header="Animes Cadastrados" 
+                <DataTable
+                    header="Animes Cadastrados"
                     value={listaAnimes}
                     selectionMode="single"
                     selection={animeSelecionado}
-                    onSelectionChange={e => {setAnimeSelecionado(e.value)}}
+                    onSelectionChange={e => { setAnimeSelecionado(e.value) }}
                     dataKey="id">
                     <Column field="nome" header="Nome"></Column>
                     <Column field="temporada" header="Temporada"></Column>
                     <Column field={e => possuiManga(e.possuiManga)} header="Possui mangá ?"></Column>
                     <Column body={actionBodyTemplate}></Column>
                 </DataTable>
-             
+
                 <Link href="/">
                     <Button id='back-button' label="Voltar" />
                 </Link>
-           
+
             </Fieldset>
         </>
     )

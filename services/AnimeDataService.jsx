@@ -13,8 +13,8 @@ export const AnimeDataService = {
 function listarAnimes() {
   return axios.get(baseUrl, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
-    })
-}
+  });
+} 
 
 function listarAnimesPorId(id) {
   return axios.get(`${baseUrl}/${id}`, {
@@ -22,13 +22,13 @@ function listarAnimesPorId(id) {
   });
 }
 
-function _post(anime){
+function _post(anime) {
   return axios.post(`${baseUrl}`, anime, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   })
 }
 
-function _put(anime){
+function _put(anime) {
   return axios.put(`${baseUrl}`, anime, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   })
@@ -39,6 +39,6 @@ function _delete(id) {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   })
 }
- 
+
 
 
