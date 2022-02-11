@@ -17,14 +17,12 @@ const withAuth = (WrappedComponent) => {
     const pathname = Router.asPath;
 
     useEffect(async () => {
-      console.log(pathname);
       const accessToken = localStorage.getItem("accessToken");
       // if no accessToken was found,then we redirect to "/" page.
       if (!accessToken) {
         Router.replace("/");
       } else {
         LoginDataService.validateToken().then(response => {
-          console.log(response.data);
           // we call the api that verifies the token.
           const data = {verified: response.data}; /*await verifyToken(accessToken);*/
           // if token was verified we set the state.

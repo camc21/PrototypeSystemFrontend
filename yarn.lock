@@ -2902,10 +2902,10 @@ primeicons@4.1.0:
   resolved "https://registry.yarnpkg.com/primeicons/-/primeicons-4.1.0.tgz#19eaef8ef5594b0006358ae64e738d03e167c9bb"
   integrity sha512-uEv2pSPk1zQCfaB2VgnUfnUxxlGryYi+5rbdxmZBBt5v9S/pscIQYS5YDLxsQZ7D9jn5c76+Tx5wX/2J1nK6sA==
 
-primereact@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/primereact/-/primereact-7.1.0.tgz#4fa417939f9466ea464e571aaf6232849ed1e8c6"
-  integrity sha512-0j9BHtHLQhKvl0TtORsyucNpR5FwWMbUd7qfTaz0FY2A0uJTLDxymPmRaosiwv6D7NO+xG1+hVJ/CHnWIE7VRg==
+primereact@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/primereact/-/primereact-7.2.0.tgz#43312059e57bef59df6082c5ea85c0be30de06c5"
+  integrity sha512-gxSkaF+VkT4LQuzo7umHs6bEMzHh0zX6in5s6scBOqQX1mMUlLIG7okPHUD1hPBi6zTJi4o4c/RYENDgsVwlAg==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -3407,6 +3407,11 @@ react-focus-lock@2.5.0:
     react-clientside-effect "^1.2.2"
     use-callback-ref "^1.2.1"
     use-sidecar "^1.0.1"
+
+react-hook-form@^7.27.0:
+  version "7.27.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.27.0.tgz#2c05e54ca557f71c55f645311ff612ec936c6c7c"
+  integrity sha512-NEh3Qbz1Rg3w95SRZv0kHorHN3frtMKasplznMBr8RkFrE4pVxjd/zo3clnFXpD0FppUVHBMfsTMtTsa6wyQrA==
 
 react-is@16.13.1, react-is@^16.12.0, react-is@^16.13.1, react-is@^16.3.2, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"

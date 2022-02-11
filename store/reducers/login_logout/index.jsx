@@ -5,10 +5,9 @@ const initialState = {
   showLogin: true,
 };
 
-const reducer = (state = initialState, action) => {
+const showLoginReducer = (state = initialState, action) => {
   switch (action.type) {
-    case HYDRATE:
-      return { ...state, ...action.payload };
+
     case SHOW_BUTTON_LOGIN:
         return {
           ...state,
@@ -19,4 +18,4 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export default reducer;
+export default showLoginReducer;

@@ -3,20 +3,28 @@ import axios from "axios";
 const baseUrl = 'http://localhost:8081/api/anime';
 
 export const AnimeDataService = {
-  listarAnimes,
-  listarAnimesPorId,
+  _list,
+  _findById,
   _post,
   _put,
-  _delete
+  _delete,
+  _page
 };
 
-function listarAnimes() {
+function _list() {
   return axios.get(baseUrl, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   });
-} 
+}
 
-function listarAnimesPorId(id) {
+function _page(pageNo, pageSize, sortBy) {
+  return axios.get(`${baseUrl}/page`, {
+    headers: { "Authorization": localStorage.getItem('accessToken') },
+    params: { "pageNo": pageNo, "pageSize": pageSize, "sortBy": sortBy}
+  });
+}
+
+function _findById(id) {
   return axios.get(`${baseUrl}/${id}`, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   });
