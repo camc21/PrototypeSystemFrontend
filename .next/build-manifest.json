@@ -24,15 +24,15 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
-    "/anime": [
+    "/login": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
-      "static/chunks/pages/anime.js"
+      "static/chunks/pages/login.js"
     ],
-    "/anime/form": [
+    "/userEntity/form": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
-      "static/chunks/pages/anime/form.js"
+      "static/chunks/pages/userEntity/form.js"
     ]
   },
   "ampFirstPages": []

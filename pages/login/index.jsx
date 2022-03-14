@@ -34,7 +34,6 @@ function Login(props) {
     const [dadosErroLogin, setDadosErroLogin] = useState({});
 
     useEffect(() => {
-        console.log(LoginDataService.isLogged);
         if(router.asPath === '/login' && localStorage.getItem('accessToken') !== null) {
             router.push('/');
         }
@@ -43,7 +42,6 @@ function Login(props) {
     const logIn = () => {
         setLoadingCredentials(true);
         LoginDataService.logIn(login, password).then(response => {
-            console.log(response.data)
             if(response.data.code > 300){
                 setDadosErroLogin(response.data);
                 setVisible(true);

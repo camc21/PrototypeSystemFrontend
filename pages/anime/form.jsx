@@ -29,10 +29,6 @@ function AnimeForm(props) {
     const router = useRouter();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        console.log(animeSelected);
-    }, [])
-
 
     function _save() {
 

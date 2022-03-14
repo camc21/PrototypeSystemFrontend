@@ -7,11 +7,12 @@ import { Button } from 'primereact/button';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Fieldset } from 'primereact/fieldset';
-import { Dropdown } from 'primereact/dropdown';
+import Select from 'react-select'
 
 import { AnimeDataService } from '../../services/AnimeDataService';
 import withAuth from '../../components/withAuth';
 import { loadSelectedDataAction, loadAnimeListAction } from '../../store/actions/anime';
+
 
 
 function Anime(props) {
@@ -20,19 +21,24 @@ function Anime(props) {
 
     const [animeSelected, setAnimeSelected] = useState(useSelector((state) => state.animeSelectedReducer.animeSelected));
 
+    const [itensPerPage, setItensPage] = useState([
+        { value: 10, label: 10 },
+        { value: 20, label: 20 },
+        { value: 50, label: 50 }
+    ]);
 
-    const [first, setfirst] = useState(0);
-    const [rows, setRows] = useState(10);
-    const [sortBy, setSortBy] = useState("nome");
-
+    const [rows, setRows] = useState(itensPerPage[0]);
+    const [sortBy, setSortBy] = useState("name");
+    const [numberPage, setNumberPage] = useState(0);
 
     const toast = useRef(null);
 
     const dispatch = useDispatch();
 
+
     useEffect(() => {
-        page(first, rows, sortBy);
-    }, [])
+        page(numberPage, rows.value, sortBy);
+    }, [rows, numberPage])
 
     function page(pageNo, pageSize, sortBy) {
         AnimeDataService._page(pageNo, pageSize, sortBy).then(response => {
@@ -50,7 +56,18 @@ function Anime(props) {
             dispatch(loadAnimeListAction(responseAux));
             setAnimeDataPage(responseAux);
         }).catch(error => {
-            toast.current.show({ severity: 'warn', summary: 'Aviso', detail: error.response.data.message, life: 3000 });
+            console.log(error.response.status);
+            switch (error.response.status) {
+                case 401:
+                    toast.current.show({ severity: 'warn', summary: 'Aviso', detail: error.response.data.message, life: 3000 });
+                    break;
+                case 404:
+                    toast.current.show({ severity: 'warn', summary: 'Aviso', detail: "Serviço indisponível", life: 3000 });
+                    break;
+                default:
+                    toast.current.show({ severity: 'warn', summary: 'Aviso', detail: "Erro no sistema, contate o administrador", life: 3000 });
+                    break;
+            }
         })
     }
 
@@ -64,10 +81,10 @@ function Anime(props) {
     }
 
     const _delete = (rowData) => {
-        const index = paginator.content.indexOf(rowData);
+        const index = animeDataPage.content.indexOf(rowData);
         AnimeDataService._delete(rowData.id).then(response => {
             toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Anime ' + rowData.nome + ' excluído com sucesso!', life: 3000 });
-            list();
+            page(numberPage, rows.value, sortBy);
         }).catch(error => {
             toast.current.show({ severity: 'warn', summary: 'Aviso', detail: error.response.data.message, life: 3000 });
         })
@@ -91,45 +108,59 @@ function Anime(props) {
         } return 'Não Possui Mangá';
     }
 
-    function onCustomPage(e) {
-        setfirst(e.first);
-        setRows(e.rows);
-    }
-
     function selectAnime(e) {
-        if(e.value){
+        if (e.value) {
             dispatch(loadSelectedDataAction(e.value))
             setAnimeSelected(e.value)
-        }else {
+        } else {
             dispatch(loadSelectedDataAction(null))
             setAnimeSelected(null)
         }
-        
+
     }
 
-    const template = {
-        layout: 'RowsPerPageDropdown CurrentPageReport PrevPageLink NextPageLink',
-        'RowsPerPageDropdown': (options) => {
-            const dropdownOptions = [
-                { label: 10, value: 10 },
-                { label: 20, value: 20 },
-                { label: 50, value: 50 }
-            ];
+    function handleItemPerPage(item) {
+        const index = itensPerPage.indexOf(item)
+        if (index >= 0) {
+            setRows(itensPerPage[index]);
+        }
+    }
 
+    function numberPageSum(numberPage) {
+        setNumberPage(numberPage--);
+    }
+
+    function numberPageMinus(numberPage) {
+        setNumberPage(numberPage++);
+    }
+
+
+    const template = {
+        'RowsPerPageDropdown': () => {
             return (
                 <React.Fragment>
-                    <span className="mx-1" style={{ color: 'var(--text-color)', userSelect: 'none' }}>Items per page: </span>
-                    <Dropdown value={options.value} options={dropdownOptions} onChange={options.onChange} />
+                    <span className="mx-1" style={{ color: 'var(--text-color)', userSelect: 'none' }}>Itens por página: </span>
+                    <Select options={itensPerPage} value={rows} onChange={(e) => handleItemPerPage(e)} isDisabled={!animeDataPage} />
                 </React.Fragment>
             );
         },
-        'CurrentPageReport': (options) => {
+        'CurrentPageReport': () => {
             return (
                 <span style={{ color: 'var(--text-color)', userSelect: 'none', width: '120px', textAlign: 'center' }}>
-                    {options.first} - {options.last} of {options.totalRecords}
+                    {animeDataPage && animeDataPage.number + 1} - {animeDataPage && animeDataPage.numberOfElements} de {animeDataPage && animeDataPage.totalElements}
                 </span>
             )
-        }
+        },
+        'PrevPageLink': () => {
+            return (
+                <Button label="Anterior" onClick={() => numberPageMinus(numberPage)} disabled={!animeDataPage || animeDataPage.first} style={{ marginRight: '10px' }} />
+            )
+        },
+        'NextPageLink': () => {
+            return (
+                <Button label="Próximo" onClick={() => numberPageSum(numberPage)} disabled={!animeDataPage || animeDataPage.last} />
+            )
+        },
     };
 
     return (
@@ -142,22 +173,23 @@ function Anime(props) {
                 </Link>
 
                 <DataTable
+                    scrollHeight="400px"
+                    scrollable
                     header="Animes Cadastrados"
-                    value={ animeDataPage && animeDataPage.content }
+                    value={animeDataPage && animeDataPage.content}
                     selection={animeSelected}
                     onSelectionChange={e => selectAnime(e)}
                     dataKey="id"
                     paginator
                     paginatorTemplate={template}
-                    first={first}
-                    rows={rows}
-                    onPage={onCustomPage}
+                    first={numberPage}
+                    rows={rows.value}
                     paginatorClassName="justify-content-end"
                 >
-                    <Column selectionMode="single" headerStyle={{width: '3em'}}></Column>
-                    <Column field="nome" header="Nome"></Column>
-                    <Column field="temporada" header="Temporada"></Column>
-                    <Column field={e => possuiManga(e.possuiManga)} header="Possui mangá ?"></Column>
+                    <Column header="Selecionado" selectionMode="single" headerStyle={{ width: '3em' }}></Column>
+                    <Column field="name" header="Nome" sortable></Column>
+                    <Column field="season" header="Temporada" sortable></Column>
+                    <Column field={e => possuiManga(e.hasManga)} header="Possui mangá ?" sortable></Column>
                     <Column body={actionBodyTemplate}></Column>
                 </DataTable>
 
