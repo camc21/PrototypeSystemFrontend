@@ -52,21 +52,21 @@ function AnimeForm(props) {
         }
     }
 
-    function onChangeNome(e) {
+    function onChangeName(e) {
         let animeAux = { ...animeSelected };
-        animeAux.nome = e.target.value;
+        animeAux.name = e.target.value;
         setAnimeSelected(animeAux);
     }
 
-    function onChangeTemporada(e) {
+    function onChangeSeason(e) {
         let animeAux = { ...animeSelected };
-        animeAux.temporada = e.value;
+        animeAux.season = e.value;
         setAnimeSelected(animeAux);
     }
 
-    function onChangePossuiManga(e) {
+    function onChangeHasManga(e) {
         let animeAux = { ...animeSelected };
-        animeAux.possuiManga = e.checked;
+        animeAux.hasManga = e.checked;
         setAnimeSelected(animeAux);
     }
 
@@ -77,21 +77,21 @@ function AnimeForm(props) {
 
                 <div className="p-fluid">
                     <div className="p-field p-grid">
-                        <label htmlFor="nome" className="p-col-12 p-md-2">Nome: </label>
+                        <label htmlFor="name" className="p-col-12 p-md-2">Nome: </label>
                         <div className="p-col-12 p-md-10">
-                            <InputText id="nome" value={animeSelected && animeSelected.nome} onChange={(e) => onChangeNome(e)} />
+                            <InputText id="name" value={animeSelected && animeSelected.name} onChange={(e) => onChangeName(e)} />
                         </div>
                     </div>
                     <div className="p-field p-grid">
-                        <label htmlFor="temporada" className="p-col-12 p-md-2">Temporada:</label>
+                        <label htmlFor="season" className="p-col-12 p-md-2">Temporada:</label>
                         <div className="p-col-12 p-md-10">
-                            <InputNumber id="temporada" value={animeSelected && animeSelected.temporada} onChange={(e) => onChangeTemporada(e)} />
+                            <InputNumber id="season" value={animeSelected && animeSelected.season} onChange={(e) => onChangeSeason(e)} />
                         </div>
                     </div>
                     <div className="p-field-checkbox">
                         <div className="p-field-checkbox">
-                            <Checkbox inputId="possuiManga" checked={animeSelected && animeSelected.possuiManga} onChange={e => onChangePossuiManga(e)} />
-                            <label htmlFor="possuiManga">Possui mangá ?</label>
+                            <Checkbox inputId="hasManga" checked={animeSelected && animeSelected.hasManga} onChange={e => onChangeHasManga(e)} />
+                            <label htmlFor="hasManga">Possui mangá ?</label>
                         </div>
                     </div>
                 </div>
