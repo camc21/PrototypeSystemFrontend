@@ -29,35 +29,10 @@
       "static/chunks/webpack.js",
       "static/chunks/pages/_error.js"
     ],
-    "/accessProfile": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/accessProfile.js"
-    ],
-    "/accessProfile/form": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/accessProfile/form.js"
-    ],
     "/anime": [
       "static/chunks/main.js",
       "static/chunks/webpack.js",
       "static/chunks/pages/anime.js"
-    ],
-    "/anime/form": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/anime/form.js"
-    ],
-    "/userEntity": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/userEntity.js"
-    ],
-    "/userEntity/form": [
-      "static/chunks/main.js",
-      "static/chunks/webpack.js",
-      "static/chunks/pages/userEntity/form.js"
     ]
   },
   "ampFirstPages": []
