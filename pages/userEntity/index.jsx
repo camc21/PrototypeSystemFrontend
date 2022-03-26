@@ -19,7 +19,7 @@ function UserEntity(props) {
 
     const [userEntityPage, setUserEntityPage] = useState(useSelector((state) => state.userEntityListReducer.userEntityPage));
 
-    const [userEntitySelected, setUserEntitySelected] = useState(useSelector((state) => state.userEntitySelectedReducer.userEntitySelected));
+    const [selectedLocalData, setSelectedLocalData] = useState(null);
 
     const [itensPerPage, setItensPage] = useState([
         { value: 10, label: 10 },
@@ -75,18 +75,15 @@ function UserEntity(props) {
         dispatch(loadUserEntitySelectedAction(null));
     }
 
-    const editar = (rowData) => {
-        dispatch(loadUserEntitySelectedAction(rowData));
-        setUserEntitySelected(rowData)
-    }
-
-    const _delete = (rowData) => {
-        const index = userEntityPage.content.indexOf(rowData);
-        UserEntityDataService._delete(rowData.id).then(response => {
-            toast.current.show({ severity: "error", summary: "Erro", detail: "Usuário " + rowData.nome + " excluído com sucesso!", life: 3000 });
+    const _delete = (idUserEntity) => {
+        UserEntityDataService._delete(idUserEntity).then(response => {
+            toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro excluído com sucesso!", life: 3000 });
+            setTimeout(() => {
+                console.log("EXECUTADO DELETE");
+            }, 3000);
             page(numberPage, rows.value, sortBy);
         }).catch(error => {
-            toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
+            console.log(error);
         })
     }
 
@@ -94,21 +91,21 @@ function UserEntity(props) {
         return (
             <>
                 <Link href="/userEntity/form">
-                    <Button style={{ marginRight: "10px" }} icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editar(rowData)} disabled={!userEntitySelected || !userEntitySelected.id} />
+                    <Button style={{ marginRight: "10px" }} icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" disabled={!selectedLocalData || rowData.idUserEntity !== selectedLocalData.idUserEntity} />
                 </Link>
 
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => _delete(rowData)} disabled={!userEntitySelected || !userEntitySelected.id} />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => _delete(rowData.idUserEntity)} disabled={!selectedLocalData || rowData.idUserEntity !== selectedLocalData.idUserEntity} />
             </>
         );
     }
 
-    function userEntitySelectedFunction(e) {
-        if (e.value) {
-            dispatch(loadUserEntitySelectedAction(e.value))
-            setUserEntitySelected(e.value)
+    function selectLocalData(e) {
+        if (e && e.value) {
+            dispatch(loadUserEntitySelectedAction(e.value));
+            setSelectedLocalData(e.value);
         } else {
-            dispatch(loadUserEntitySelectedAction(null))
-            setUserEntitySelected(null)
+            dispatch(loadUserEntitySelectedAction(null));
+            setSelectedLocalData(null);
         }
 
     }
@@ -171,9 +168,9 @@ function UserEntity(props) {
                     scrollable
                     header="Usuários Cadastrados"
                     value={userEntityPage && userEntityPage.content}
-                    selection={userEntitySelectedFunction}
-                    onSelectionChange={e => setUserEntitySelected(e)}
-                    dataKey="id"
+                    dataKey="idUserEntity"
+                    selection={selectedLocalData}
+                    onSelectionChange={e => selectLocalData(e)}
                     paginator
                     paginatorTemplate={template}
                     first={numberPage}
@@ -181,10 +178,9 @@ function UserEntity(props) {
                     paginatorClassName="justify-content-end"
                 >
                     <Column header="Selecionado" selectionMode="single" headerStyle={{ width: "3em" }}></Column>
-                    <Column field="nome" header="Nome" sortable></Column>
-                    <Column field="login" header="Login" sortable></Column>
+                    <Column field="name" header="Nome" sortable></Column>
                     <Column field="email" header="E-mail" sortable></Column>
-                    <Column field="perfis" header="Perfis de Acesso" sortable></Column>
+                    <Column field="accessProfilesText" header="Perfis de Acesso" sortable></Column>
                     <Column body={actionBodyTemplate}></Column>
                 </DataTable>
 

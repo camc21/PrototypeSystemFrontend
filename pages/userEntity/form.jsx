@@ -22,13 +22,14 @@ import "primeflex/primeflex.css";
 import { UserEntityDataService } from "../../services/UserEntityDataService";
 import { AccessProfileDataService } from "../../services/AccessProfileDataService";
 
-import { loadUserEntitySelectedAction } from "../../store/actions/userEntity";
 
 
 
 function UserEntityForm(props) {
 
-    const [userEntitySelected, setUserEntitySelected] = useState(useSelector((state) => state.userEntitySelectedReducer.userEntitySelected));
+    const userEntitySelectedRedux = useSelector((state) => state.userEntitySelectedReducer.userEntitySelected);
+
+    const [selectedLocalData, setSelectedLocalData] = useState(null);
 
     const [comboBoxAccessProfiles, setComboBoxAccessProfiles] = useState([]);
     const [selectedAccessProfilesList, setSelectedAccessProfileList] = useState([]);
@@ -38,18 +39,79 @@ function UserEntityForm(props) {
     const router = useRouter();
     const dispatch = useDispatch();
 
+    const { control, register, handleSubmit, setValue, errors, getValues } = useForm({ mode: 'onChange' });
+
+    const onSubmit = data => {
+        let userLogin = {};
+        userLogin.idUserEntity = userEntitySelectedRedux ? userEntitySelectedRedux.idUserEntity : null;
+        userLogin.idLogin = userEntitySelectedRedux ? userEntitySelectedRedux.idLogin : null;
+        userLogin.name = data.name;
+        userLogin.email = data.email;
+        if(data.password){
+            const bcrypt = require('bcryptjs');
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(data.password, salt);
+            userLogin.password = hash;
+        }
+        userLogin.accessProfileList = selectedAccessProfilesList;
+        if(!userLogin.idUserEntity){
+            UserEntityDataService._post(userLogin).then(response => {
+                toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro criado com sucesso!", life: 3000 });
+                setTimeout(() => {
+                    console.log("EXECUTADO POST");
+                    router.push("/userEntity");
+                }, 3000);
+            }).catch(error => {
+                console.log(error);
+            })
+        } else {
+            UserEntityDataService._put(userLogin).then(response => {
+                toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro alterado com sucesso!", life: 3000 });
+                setTimeout(() => {
+                    console.log("EXECUTADO PUT");
+                    router.push("/userEntity");
+                }, 3000);
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+        
+        
+    }
 
     useEffect(() => {
         AccessProfileDataService._comboBoxAccessProfiles().then(response => {
-            setComboBoxAccessProfiles(response.data);
-            setValue("accessProfile", response.data[0].value);
+            if (userEntitySelectedRedux) {
+                setValue("name", userEntitySelectedRedux.name);
+                setValue("email", userEntitySelectedRedux.email);
+                setValue("password", userEntitySelectedRedux.password);
+                setSelectedAccessProfileList(userEntitySelectedRedux.accessProfileList);
+                let comboBoxAccessProfileAux = [];
+                response.data.forEach(ap => {
+                    const object = userEntitySelectedRedux.accessProfileList.find(apAux => apAux.value === ap.value);
+                    if (!object) {
+                        comboBoxAccessProfileAux.push(ap);
+                    }
+                });
+                setComboBoxAccessProfiles(comboBoxAccessProfileAux);
+                if(comboBoxAccessProfileAux.length > 0){
+                    setValue("accessProfile", comboBoxAccessProfileAux[0].value);
+                }
+            } else {
+                setComboBoxAccessProfiles(response.data);
+                if(response.data.length > 0){
+                    setValue("accessProfile", response.data[0].value);
+                }
+                
+            }
         })
-    }, []);
+    }, [userEntitySelectedRedux]);
+
 
     function _save() {
 
-        if (!userEntitySelected.id) {
-            UserEntityDataService._post(userEntitySelected).then(response => {
+        if (!selectedLocalData.id) {
+            UserEntityDataService._post(selectedLocalData).then(response => {
                 toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro criado com sucesso!", life: 3000 });
                 setTimeout(() => {
                     console.log("EXECUTADO POST");
@@ -57,7 +119,7 @@ function UserEntityForm(props) {
                 }, 3000);
             })
         } else {
-            UserEntityDataService._put(userEntitySelected).then(response => {
+            UserEntityDataService._put(selectedLocalData).then(response => {
                 toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro alterado com sucesso!", life: 3000 });
                 setTimeout(() => {
                     console.log("EXECUTADO PUT");
@@ -77,7 +139,7 @@ function UserEntityForm(props) {
         //atualiza combobox das funcionalidade deixando apenas a funcionalidades não adicionadas no combobox
         setComboBoxAccessProfiles(comboBoxAccessProfileAux);
         //atualiza a funcionalidade selecionada após a atualização do array de funcioalidades
-        if(comboBoxAccessProfileAux && comboBoxAccessProfileAux.length > 0){
+        if (comboBoxAccessProfileAux && comboBoxAccessProfileAux.length > 0) {
             setValue("accessProfile", comboBoxAccessProfileAux[0].value);
         }
         //atualiza a tabela com os dados da funcionalidade e as permissões da mesma
@@ -85,7 +147,6 @@ function UserEntityForm(props) {
     }
 
     const removeAccessProfile = (rowData) => {
-        console.log(rowData);
         let selectedAccessProfilesListAux = selectedAccessProfilesList.filter(function (item) { return item.value !== rowData.value });
         setSelectedAccessProfileList(selectedAccessProfilesListAux);
 
@@ -95,8 +156,8 @@ function UserEntityForm(props) {
         setValue("accessProfile", comboBoxAccessProfileAux[0].value);
     }
 
-    function idButtonRemoveListGenerate(rowData){
-        return "buttonRemoveFromList" + rowData.id;
+    function idButtonRemoveListGenerate(rowData) {
+        return "buttonRemoveFromList" + rowData.value;
     }
 
     const actionBodyTemplate = (rowData) => {
@@ -105,12 +166,6 @@ function UserEntityForm(props) {
                 <Button type="button" id={idButtonRemoveListGenerate(rowData)} icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => removeAccessProfile(rowData)} />
             </>
         );
-    }
-
-    const { control, register, handleSubmit, setValue, errors, getValues } = useForm({ mode: 'onChange' });
-
-    const onSubmit = data => {
-        console.log(data);
     }
 
     return (
@@ -125,12 +180,13 @@ function UserEntityForm(props) {
                             name="name"
                             control={control}
                             defaultValue={""}
-                            render={({ field }) =>
+                            render={({ field: { onChange, value } }) =>
                                 <InputText
-                                    {...field}
                                     id="name"
                                     name="name"
                                     placeholder="Nome"
+                                    onChange={value => onChange(value)}
+                                    value={value}
                                     className="inputfield w-full"
                                 />}
                         />
@@ -147,24 +203,7 @@ function UserEntityForm(props) {
                                     {...field}
                                     id="email"
                                     name="email"
-                                    placeholder="E=mail"
-                                    className="inputfield w-full"
-                                />}
-                        />
-                    </div>
-
-                    <div className="field">
-                        <label htmlFor="login">Login:</label>
-                        <Controller
-                            name="login"
-                            control={control}
-                            defaultValue={""}
-                            render={({ field }) =>
-                                <InputText
-                                    {...field}
-                                    id="login"
-                                    name="login"
-                                    placeholder="Login"
+                                    placeholder="E-mail"
                                     className="inputfield w-full"
                                 />}
                         />

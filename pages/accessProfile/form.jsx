@@ -45,7 +45,7 @@ function AccessProfileForm(props) {
             if (accessProfileSelectedRedux && accessProfileSelectedRedux.permissions) {
                 for (let i = 0; i < response.data.length; i++) {
                     for (let j = 0; j < accessProfileSelectedRedux.permissions.length; j++) {
-                        let value = accessProfileSelectedRedux.permissions.find(item => item.id === response.data[i].value);
+                        let value = accessProfileSelectedRedux.permissions.find(item => item.functonalityId === response.data[i].value);
                         if(!value){
                             comboBoxAux.push(response.data[i]);
                             break
@@ -75,7 +75,6 @@ function AccessProfileForm(props) {
 
     useEffect(() => {
         if (accessProfileSelectedRedux && accessProfileSelectedRedux.permissions) {
-            console.log(accessProfileSelectedRedux.permissions);
             let accessProfileDataAux = {};
             accessProfileDataAux.id = accessProfileSelectedRedux.id;
             accessProfileDataAux.name = accessProfileSelectedRedux.name;
@@ -133,7 +132,7 @@ function AccessProfileForm(props) {
 
     const addFunctionality = () => {
         let dataTablePermissionAux = dataTablePermission;
-        dataTablePermissionAux.push({ id: selectedComboBoxFunctionality.value, name: selectedComboBoxFunctionality.label, readingPermission: permissions.readingPermission, writingPermission: permissions.writingPermission });
+        dataTablePermissionAux.push({ accessProfileId: accessProfileSelectedRedux.id, profileName: accessProfileSelectedRedux.name, profileDescription: accessProfileSelectedRedux.description, functonalityId: selectedComboBoxFunctionality.value, functionalityName: selectedComboBoxFunctionality.label, writePermission: permissions.writingPermission, readPermission: permissions.readingPermission });
         let comboBoxFunctionalitiesAux = comboBoxFunctionalities.filter(item => item.label !== selectedComboBoxFunctionality.label);
 
         //atualiza combobox das funcionalidade deixando apenas a funcionalidades não adicionadas no combobox
@@ -147,11 +146,11 @@ function AccessProfileForm(props) {
     }
 
     const removeFunctionality = (rowData) => {
-        let dataTablePermissionAux = dataTablePermission.filter(function (item) { return item.id !== rowData.id });
+        let dataTablePermissionAux = dataTablePermission.filter(function (item) { return item.functonalityId !== rowData.functonalityId });
         setDataTablePermission(dataTablePermissionAux);
 
         let comboBoxFunctionalitiesAux = comboBoxFunctionalities;
-        comboBoxFunctionalitiesAux.push({ value: rowData.id, label: rowData.name });
+        comboBoxFunctionalitiesAux.push({ value: rowData.functonalityId, label: rowData.functionalityName });
         setComboBoxFunctionalities(comboBoxFunctionalitiesAux);
         setSelectedComboBoxFunctionality(comboBoxFunctionalitiesAux[0]);
     }
@@ -213,9 +212,9 @@ function AccessProfileForm(props) {
                         value={dataTablePermission}
                         responsiveLayout="scroll">
                         <Column header="Selecionado" selectionMode="single" headerStyle={{ width: "3em" }}></Column>
-                        <Column field="name" header="Funcionalidade"></Column>
-                        <Column field={(e) => convertBooleanToText(e.readingPermission)} header="Leitura"></Column>
-                        <Column field={(e) => convertBooleanToText(e.writingPermission)} header="Escrita"></Column>
+                        <Column field="functionalityName" header="Funcionalidade"></Column>
+                        <Column field={(e) => convertBooleanToText(e.readPermission)} header="Leitura"></Column>
+                        <Column field={(e) => convertBooleanToText(e.writePermission)} header="Escrita"></Column>
                         <Column body={actionBodyTemplate}></Column>
                     </DataTable>
                 </div>

@@ -10,8 +10,8 @@ const baseUrl = `http://localhost:8081`;
     validateToken,
   };
 
-  function logIn(username, password) {
-    let data = {username, password}
+  function logIn(email, password) {
+    let data = {email, password}
     return axios.post(baseUrl+'/auth/signin', data, {})
   }
 
@@ -23,7 +23,6 @@ const baseUrl = `http://localhost:8081`;
 
   function isLogged() {
     const token = localStorage.getItem('accessToken');
-    console.log(token);
     return token;
   }
 

@@ -18,8 +18,7 @@ import { loadAccessProfileSelectedAction, loadAccessProfileListAction } from "..
 function AccessProfile(props) {
 
     const [accessProfilePage, setAccessProfilePage] = useState(useSelector((state) => state.accessProfileListReducer.accessProfilePage));
-
-    const [accessProfileSelected, setAccessProfileSelected] = useState(useSelector((state) => state.accessProfileSelectedReducer.accessProfileSelected));
+    const [selectedLocalData, setSelectedLocalData] = useState(null);
 
     const [itensPerPage, setItensPage] = useState([
         { value: 10, label: 10 },
@@ -30,6 +29,7 @@ function AccessProfile(props) {
     const [rows, setRows] = useState(itensPerPage[0]);
     const [sortBy, setSortBy] = useState("name");
     const [numberPage, setNumberPage] = useState(0);
+    
 
     const toast = useRef(null);
 
@@ -38,7 +38,6 @@ function AccessProfile(props) {
     useEffect(() => {
       return () => {
         setAccessProfilePage(null);
-        setAccessProfileSelected(null);
         setItensPage(null);
         setRows(null);
         setSortBy(null);
@@ -66,7 +65,7 @@ function AccessProfile(props) {
                 totalPages: response.data.totalPages
             }
             dispatch(loadAccessProfileListAction(responseAux));
-            setAccessProfilePage(responseAux);7
+            setAccessProfilePage(responseAux);
         }).catch(error => {
             switch (error.response.status) {
                 case 401:
@@ -87,14 +86,6 @@ function AccessProfile(props) {
         dispatch(loadAccessProfileSelectedAction(null));
     }
 
-    const editar = (rowData) => {
-        AccessProfileDataService._findById(rowData.id).then(response => {
-            console.log(response.data);
-            setAccessProfileSelected(response.data);
-            dispatch(loadAccessProfileSelectedAction(response.data));
-        });
-    }
-
     const _delete = (rowData) => {
         const index = accessProfilePage.content.indexOf(rowData);
         AccessProfileDataService._delete(rowData.id).then(response => {
@@ -109,21 +100,21 @@ function AccessProfile(props) {
         return (
             <>
                 <Link href="/accessProfile/form">
-                    <Button style={{ marginRight: "10px" }} icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editar(rowData)} disabled={!accessProfileSelected || !accessProfileSelected.id} />
+                    <Button style={{ marginRight: "10px" }} icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" disabled={!selectedLocalData || rowData.id !== selectedLocalData.id} />
                 </Link>
 
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => _delete(rowData)} disabled={!accessProfileSelected || !accessProfileSelected.id} />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => _delete(rowData)} disabled={!selectedLocalData || rowData.id !== selectedLocalData.id} />
             </>
         );
     }
 
-    function accessProfileSelectedFunction(e) {
-        if (e.value) {
-            dispatch(loadAccessProfileSelectedAction(e.value))
-            setAccessProfileSelected(e.value)
+    function selectLocalData(e) {
+        if (e && e.value) {
+            dispatch(loadAccessProfileSelectedAction(e.value));
+            setSelectedLocalData(e.value);
         } else {
-            dispatch(loadAccessProfileSelectedAction(null))
-            setAccessProfileSelected(null)
+            dispatch(loadAccessProfileSelectedAction(null));
+            setSelectedLocalData(null);
         }
 
     }
@@ -186,8 +177,8 @@ function AccessProfile(props) {
                     scrollable
                     header="Perfis de Acesso Cadastrados"
                     value={accessProfilePage && accessProfilePage.content}
-                    selection={accessProfileSelected}
-                    onSelectionChange={e => accessProfileSelectedFunction(e)}
+                    selection={selectedLocalData}
+                    onSelectionChange={e => selectLocalData(e)}
                     dataKey="id"
                     paginator
                     paginatorTemplate={template}

@@ -1,7 +1,7 @@
 import { LOAD_USER_ENTITY_SELECTED } from "../../actions";
 
 
-const initialState = { id: undefined, name: "", email: "" }
+const initialState = { id: undefined, name: undefined, email: undefined }
 
 
 
@@ -15,13 +15,7 @@ const userEntitySelectedReducer = (state = initialState, action) => {
           ...state,
           userEntitySelected: action.payload
         }
-      } else {
-        return {
-          ...state,
-          userEntitySelected: initialState
-        }
-      }
-
+      } 
     default:
       return state;
   }

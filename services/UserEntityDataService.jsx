@@ -30,20 +30,20 @@ function _findById(id) {
   });
 }
 
-function _post(usuario) {
-  return axios.post(`${baseUrl}`, usuario, {
+function _post(userEntityLogin) {
+  return axios.post(`${baseUrl}`, userEntityLogin, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   })
 }
 
-function _put(usuario) {
-  return axios.put(`${baseUrl}`, usuario, {
+function _put(userEntityLogin) {
+  return axios.put(`${baseUrl}`, userEntityLogin, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   })
 }
 
-function _delete(id) {
-  return axios.delete(`${baseUrl}/${id}`, {
+function _delete(idUserEntity) {
+  return axios.delete(`${baseUrl}/${idUserEntity}`, {
     headers: { "Authorization": localStorage.getItem('accessToken') }
   })
 }

@@ -29,8 +29,6 @@ function Login(props) {
     const toast = useRef(null);
     const router = useRouter()
 
-    const [login, setLogin] = useState("");
-    const [password, setPassword] = useState("");
     const [loadingCredentials, setLoadingCredentials] = useState(false);
     const [visible, setVisible] = useState(false);
 
@@ -40,8 +38,8 @@ function Login(props) {
         }
     }, [])
 
-    function handleInputLoginChange(e) {
-        setValue('login', e.target.value);
+    function handleInputEmailChange(e) {
+        setValue('email', e.target.value);
     }
 
     function handleInputPasswordChange(e) {
@@ -51,10 +49,9 @@ function Login(props) {
     const { control, register, handleSubmit, setValue, errors, getValues } = useForm({ mode: 'onChange' });
 
     const onSubmit = data => {
-        console.log(data);
         setLoadingCredentials(true);
-        if (data.login !== "" && data.password !== "") {
-            LoginDataService.logIn(data.login, data.password).then(response => {
+        if (data.email !== "" && data.password !== "") {
+            LoginDataService.logIn(data.email, data.password).then(response => {
                 if (response.data.code > 300) {
                     toast.current.show({ severity: "warn", summary: "Aviso", detail: response.data.message, life: 3000 });
                     setVisible(true);
@@ -68,7 +65,7 @@ function Login(props) {
                 }
             });
         } else {
-            toast.current.show({ severity: "warn", summary: "Aviso", detail: "Preencha os campos, Login e Senha", life: 3000 });
+            toast.current.show({ severity: "warn", summary: "Aviso", detail: "Preencha os campos, E-mail e Senha", life: 3000 });
             setLoadingCredentials(false);
         }
     }
@@ -79,21 +76,21 @@ function Login(props) {
                 <Toast ref={toast} />
                 <div className={styles.layout_login_no_messages}>
                     <div className={styles.box_login}>
-                        <h5>Login</h5>
+                        <h5>E-mail</h5>
                         <Controller
                             control={control}
-                            name="login"
+                            name="email"
                             defaultValue={undefined}
                             rules={{
                                 required: true, maxLength: 50
                             }}
                             render={({ onBlur, onChange, value }) => (
                                 <InputText
-                                    id="login"
-                                    name="login"
-                                    onChange={(e) => handleInputLoginChange(e)}
+                                    id="email"
+                                    name="email"
+                                    onChange={(e) => handleInputEmailChange(e)}
                                     value={value}
-                                    placeholder="Login"
+                                    placeholder="E-mail"
                                 />
                             )}
                         />
@@ -123,7 +120,7 @@ function Login(props) {
                                 />
                             )}
                         />
-                        <Button type="submit" label="Login" />
+                        <Button type="submit" label="Entrar" />
                         {loadingCredentials &&
                             <ProgressSpinner />
                         }
