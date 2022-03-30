@@ -29,7 +29,7 @@ function UserEntityForm(props) {
 
     const userEntitySelectedRedux = useSelector((state) => state.userEntitySelectedReducer.userEntitySelected);
 
-    const [selectedLocalData, setSelectedLocalData] = useState(null);
+    const [selectedPermissionDataTable, setSelectedPermissionDataTable] = useState(null);
 
     const [comboBoxAccessProfiles, setComboBoxAccessProfiles] = useState([]);
     const [selectedAccessProfilesList, setSelectedAccessProfileList] = useState([]);
@@ -108,28 +108,6 @@ function UserEntityForm(props) {
     }, [userEntitySelectedRedux]);
 
 
-    function _save() {
-
-        if (!selectedLocalData.id) {
-            UserEntityDataService._post(selectedLocalData).then(response => {
-                toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro criado com sucesso!", life: 3000 });
-                setTimeout(() => {
-                    console.log("EXECUTADO POST");
-                    router.push("/userEntity");
-                }, 3000);
-            })
-        } else {
-            UserEntityDataService._put(selectedLocalData).then(response => {
-                toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro alterado com sucesso!", life: 3000 });
-                setTimeout(() => {
-                    console.log("EXECUTADO PUT");
-                    router.push("/userEntity");
-                }, 3000);
-
-            })
-        }
-    }
-
     const addAccessProfile = () => {
         let selectedAccessProfilesListAux = selectedAccessProfilesList;
         const ap = comboBoxAccessProfiles.find(item => item.value === getValues("accessProfile"));
@@ -158,6 +136,14 @@ function UserEntityForm(props) {
 
     function idButtonRemoveListGenerate(rowData) {
         return "buttonRemoveFromList" + rowData.value;
+    }
+
+    function selectedPermissionDataTableFunction(e) {
+        if (e && e.value) {
+            setSelectedPermissionDataTable(e.value);
+        } else {
+            setSelectedPermissionDataTable(null);
+        }
     }
 
     const actionBodyTemplate = (rowData) => {
@@ -260,6 +246,8 @@ function UserEntityForm(props) {
                             scrollHeight="300px"
                             scrollable
                             value={selectedAccessProfilesList}
+                            selection={selectedPermissionDataTable}
+                            onSelectionChange={e => selectedPermissionDataTableFunction(e)}
                             responsiveLayout="scroll">
                             <Column header="Selecionado" selectionMode="single" headerStyle={{ width: "3em" }}></Column>
                             <Column field="label" header="Perfil de Acesso"></Column>

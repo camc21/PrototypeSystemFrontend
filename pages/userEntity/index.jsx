@@ -56,18 +56,21 @@ function UserEntity(props) {
             dispatch(loadUserEntityListAction(responseAux));
             setUserEntityPage(responseAux);
         }).catch(error => {
-            switch (error.response.status) {
-                case 401:
-                    toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
-                    break;
-                case 404:
-                    toast.current.show({ severity: "warn", summary: "Aviso", detail: "Serviço indisponível", life: 3000 });
-                    break;
-                default:
-                    toast.current.show({ severity: "warn", summary: "Aviso", detail: "Erro no sistema, contate o administrador", life: 3000 });
-                    break;
+            if (error.response.data.message.indexOf("Usuário") === -1) {
+                toast.current.show({ severity: "warn", summary: "Aviso", detail: "Servidor indisponível, contate o administrador", life: 3000 });
+            } else {
+                switch (error.response.status) {
+                    case 401:
+                        toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
+                        break;
+                    case 404:
+                        toast.current.show({ severity: "warn", summary: "Aviso", detail: "Serviço indisponível", life: 3000 });
+                        break;
+                    default:
+                        toast.current.show({ severity: "warn", summary: "Aviso", detail: "Erro no sistema, contate o administrador", life: 3000 });
+                        break;
+                }
             }
-
         })
     }
 

@@ -29,22 +29,22 @@ function AccessProfile(props) {
     const [rows, setRows] = useState(itensPerPage[0]);
     const [sortBy, setSortBy] = useState("name");
     const [numberPage, setNumberPage] = useState(0);
-    
+
 
     const toast = useRef(null);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-      return () => {
-        setAccessProfilePage(null);
-        setItensPage(null);
-        setRows(null);
-        setSortBy(null);
-        setNumberPage(null);
-      }
+        return () => {
+            setAccessProfilePage(null);
+            setItensPage(null);
+            setRows(null);
+            setSortBy(null);
+            setNumberPage(null);
+        }
     }, [])
-    
+
 
 
     useEffect(() => {
@@ -67,18 +67,22 @@ function AccessProfile(props) {
             dispatch(loadAccessProfileListAction(responseAux));
             setAccessProfilePage(responseAux);
         }).catch(error => {
-            switch (error.response.status) {
-                case 401:
-                    toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
-                    break;
-                case 404:
-                    toast.current.show({ severity: "warn", summary: "Aviso", detail: "Serviço indisponível", life: 3000 });
-                    break;
-                default:
-                    toast.current.show({ severity: "warn", summary: "Aviso", detail: "Erro no sistema, contate o administrador", life: 3000 });
-                    break;
+            console.log(error.response.data);
+            if (error.response.data.message.indexOf("Perfil de Acesso") === -1) {
+                toast.current.show({ severity: "warn", summary: "Aviso", detail: "Servidor indisponível, contate o administrador", life: 3000 });
+            } else {
+                switch (error.response.status) {
+                    case 401:
+                        toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
+                        break;
+                    case 404:
+                        toast.current.show({ severity: "warn", summary: "Aviso", detail: "Serviço indisponível", life: 3000 });
+                        break;
+                    default:
+                        toast.current.show({ severity: "warn", summary: "Aviso", detail: "Erro no sistema, contate o administrador", life: 3000 });
+                        break;
+                }
             }
-
         })
     }
 

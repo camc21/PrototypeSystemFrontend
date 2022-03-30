@@ -34,6 +34,7 @@ function AccessProfileForm(props) {
     const [selectedComboBoxFunctionality, setSelectedComboBoxFunctionality] = useState({});
     const [dataTablePermission, setDataTablePermission] = useState([]);
     const [permissions, setPermissions] = useState({ readingPermission: false, writingPermission: false });
+    const [selectedAccessProfileDataTable, setSelectedAccessProfileDataTable] = useState(null);
 
     const toast = useRef(null);
     const router = useRouter();
@@ -87,6 +88,7 @@ function AccessProfileForm(props) {
 
     function _save() {
         let accessProfileDataAux = accessProfileData;
+        console.log(dataTablePermission);
         accessProfileDataAux.permissions = dataTablePermission;
         if (!accessProfileDataAux.id) {
             AccessProfileDataService._post(accessProfileDataAux).then(response => {
@@ -161,6 +163,14 @@ function AccessProfileForm(props) {
         } return "Não";
     }
 
+    function selectedAccessProfileDataTableFunction(e) {
+        if (e && e.value) {
+            setSelectedAccessProfileDataTable(e.value);
+        } else {
+            setSelectedAccessProfileDataTable(null);
+        }
+    }
+
     const actionBodyTemplate = (rowData) => {
         return (
             <>
@@ -210,6 +220,8 @@ function AccessProfileForm(props) {
                         scrollHeight="300px"
                         scrollable
                         value={dataTablePermission}
+                        selection={selectedAccessProfileDataTable}
+                        onSelectionChange={e => selectedAccessProfileDataTableFunction(e)}
                         responsiveLayout="scroll">
                         <Column header="Selecionado" selectionMode="single" headerStyle={{ width: "3em" }}></Column>
                         <Column field="functionalityName" header="Funcionalidade"></Column>

@@ -74,57 +74,55 @@ function Login(props) {
         <div className={styles.layout_login}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Toast ref={toast} />
-                <div className={styles.layout_login_no_messages}>
-                    <div className={styles.box_login}>
-                        <h5>E-mail</h5>
-                        <Controller
-                            control={control}
-                            name="email"
-                            defaultValue={undefined}
-                            rules={{
-                                required: true, maxLength: 50
-                            }}
-                            render={({ onBlur, onChange, value }) => (
-                                <InputText
-                                    id="email"
-                                    name="email"
-                                    onChange={(e) => handleInputEmailChange(e)}
-                                    value={value}
-                                    placeholder="E-mail"
-                                />
-                            )}
-                        />
+                <div className={styles.box_login}>
+                    <h5 style={{marginTop: "15px"}}>E-mail</h5>
+                    <Controller
+                        control={control}
+                        name="email"
+                        defaultValue={undefined}
+                        rules={{
+                            required: true, maxLength: 50
+                        }}
+                        render={({ onBlur, onChange, value }) => (
+                            <InputText
+                                id="email"
+                                name="email"
+                                onChange={(e) => handleInputEmailChange(e)}
+                                value={value}
+                                placeholder="E-mail"
+                            />
+                        )}
+                    />
 
-                        <h5>Senha</h5>
-                        <Controller
-                            control={control}
-                            name="password"
-                            defaultValue={undefined}
-                            rules={{
-                                required: true, maxLength: 50
-                            }}
-                            render={({ onBlur, onChange, value }) => (
-                                <Password
-                                    // style={{ width: '100%', borderColor: errors.nome ? 'red' : '' }}
-                                    id="password"
-                                    name="password"
-                                    onChange={(e) => handleInputPasswordChange(e)}
-                                    value={value}
-                                    placeholder="Senha"
-                                    toggleMask
-                                    weakLabel="Fraca"
-                                    mediumLabel="Média"
-                                    strongLabel="Forte"
-                                    promptLabel="Por favor entre com a senha"
-                                    autoComplete="new-password"
-                                />
-                            )}
-                        />
-                        <Button type="submit" label="Entrar" />
-                        {loadingCredentials &&
-                            <ProgressSpinner />
-                        }
-                    </div>
+                    <h5 style={{marginTop: "15px"}}>Senha</h5>
+                    <Controller
+                        control={control}
+                        name="password"
+                        defaultValue={undefined}
+                        rules={{
+                            required: true, maxLength: 50
+                        }}
+                        render={({ onBlur, onChange, value }) => (
+                            <Password
+                                // style={{ width: '100%', borderColor: errors.nome ? 'red' : '' }}
+                                id="password"
+                                name="password"
+                                onChange={(e) => handleInputPasswordChange(e)}
+                                value={value}
+                                placeholder="Senha"
+                                toggleMask
+                                weakLabel="Fraca"
+                                mediumLabel="Média"
+                                strongLabel="Forte"
+                                promptLabel="Por favor entre com a senha"
+                                autoComplete="new-password"
+                            />
+                        )}
+                    />
+                    <Button style={{marginTop: "20px", backgroundColor: "#fff", color: "#000", fontWeight: "bold"}} type="submit" label="Entrar" />
+                    {loadingCredentials &&
+                        <ProgressSpinner />
+                    }
                 </div>
             </form>
         </div>
