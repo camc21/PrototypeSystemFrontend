@@ -1,1 +1,0 @@
-{"ast":null,"code":"import { animeService } from '../services';","map":{"version":3,"sources":["C:/PROJETOS/TESTE/FRONTEND/primereact-nextjs-quickstart/services/index.js"],"names":["animeService"],"mappings":"AAAA,SAASA,YAAT,QAA6B,aAA7B","sourcesContent":["import { animeService } from '../services'"]},"metadata":{},"sourceType":"module"}
