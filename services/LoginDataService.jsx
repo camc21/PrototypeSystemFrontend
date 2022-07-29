@@ -12,7 +12,7 @@ const baseUrl = `http://localhost:8081`;
 
   function logIn(email, password) {
     let data = {email, password}
-    return axios.post(baseUrl+'/oauth-service/signin', data, {})
+    return axios.post(baseUrl+'/auth/signin', data, {})
   }
 
   function logOut() {
@@ -28,7 +28,7 @@ const baseUrl = `http://localhost:8081`;
 
   function validateToken() {
     const token = localStorage.getItem('accessToken');
-    return axios.get(baseUrl+'/oauth-service/validateToken', {
+    return axios.get(baseUrl+'/auth/validateToken', {
       params: {
         token: token
       }
