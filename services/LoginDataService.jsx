@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from 'next/router'
 
-const baseUrl = `http://localhost:8081`;
+const baseUrl = `http://localhost:8080`;
 
   export const LoginDataService = {
     logIn,
@@ -12,7 +12,7 @@ const baseUrl = `http://localhost:8081`;
 
   function logIn(email, password) {
     let data = {email, password}
-    return axios.post(baseUrl+'/auth/signin', data, {})
+    return axios.post(baseUrl+'/auth/signin', data)
   }
 
   function logOut() {

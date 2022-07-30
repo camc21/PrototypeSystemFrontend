@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'http://localhost:8081/api/anime';
+const baseUrl = 'http://localhost:8080/api/anime';
 
 export const AnimeDataService = {
   _list,

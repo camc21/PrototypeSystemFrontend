@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'http://localhost:8081/api/functionality';
+const baseUrl = 'http://localhost:8080/api/functionality';
 
 export const FunctionalityDataService = {
   _comboBox

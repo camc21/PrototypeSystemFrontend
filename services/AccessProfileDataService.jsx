@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'http://localhost:8081/api/accessProfile';
+const baseUrl = 'http://localhost:8080/api/accessProfile';
 
 export const AccessProfileDataService = {
   _list,
