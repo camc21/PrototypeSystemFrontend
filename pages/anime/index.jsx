@@ -56,18 +56,22 @@ function Anime(props) {
             dispatch(loadAnimeListAction(responseAux));
             setAnimeDataPage(responseAux);
         }).catch(error => {
-            console.log(error.response.status);
-            switch (error.response.status) {
-                case 401:
-                    toast.current.show({ severity: 'warn', summary: 'Aviso', detail: error.response.data.message, life: 3000 });
-                    break;
-                case 404:
-                    toast.current.show({ severity: 'warn', summary: 'Aviso', detail: "Serviço indisponível", life: 3000 });
-                    break;
-                default:
-                    toast.current.show({ severity: 'warn', summary: 'Aviso', detail: "Erro no sistema, contate o administrador", life: 3000 });
-                    break;
+            if(error.response){
+                switch (error.response.status) {
+                    case 401:
+                        toast.current.show({ severity: 'warn', summary: 'Aviso', detail: error.response.data.message, life: 3000 });
+                        break;
+                    case 404:
+                        toast.current.show({ severity: 'warn', summary: 'Aviso', detail: "Serviço indisponível", life: 3000 });
+                        break;
+                    default:
+                        toast.current.show({ severity: 'warn', summary: 'Aviso', detail: "Erro no sistema, contate o administrador", life: 3000 });
+                        break;
+                }
+            } else {
+                toast.current.show({ severity: 'warn', summary: 'Aviso', detail: "Serviço indisponível", life: 3000 });
             }
+      
         })
     }
 
