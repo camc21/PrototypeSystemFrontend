@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'http://localhost:8080/api/userEntity';
+const baseUrl = 'http://localhost:8080/api/user-entity';
 
 export const UserEntityDataService = {
   _list,
