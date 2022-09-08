@@ -80,11 +80,12 @@ function UserEntityForm(props) {
     }
 
     useEffect(() => {
+        console.log(userEntitySelectedRedux);
         AccessProfileDataService._comboBoxAccessProfiles().then(response => {
             if (userEntitySelectedRedux) {
                 setValue("name", userEntitySelectedRedux.name);
                 setValue("email", userEntitySelectedRedux.email);
-                setValue("password", userEntitySelectedRedux.password);
+                setValue("password", "");
                 setSelectedAccessProfileList(userEntitySelectedRedux.accessProfileList);
                 let comboBoxAccessProfileAux = [];
                 response.data.forEach(ap => {
@@ -214,6 +215,7 @@ function UserEntityForm(props) {
                                     strongLabel="Forte"
                                     promptLabel="Por favor entre com a senha"
                                     className="inputfield w-full"
+                                    defaultValue={undefined}
                                 />}
                         />
                     </div>
