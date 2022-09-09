@@ -19,7 +19,7 @@ function Index (props) {
 
                 <Row>
                     <Col>
-                        <img src="/icons/accessProfile.svg" alt='access-profile' style={{ height: 53, width: 36 , display: "inline", marginRight: "10px"}} />
+                        <img src="/icons/identity.svg" alt='access-profile' style={{ height: 53, width: 36 , display: "inline", marginRight: "10px"}} />
                         <Link href="/access-profile">    
                             <a>Perfil de Acesso</a>
                         </Link>
@@ -37,7 +37,7 @@ function Index (props) {
 
                 <Row>
                     <Col>
-                    <img src="/icons/anime.svg" alt='access-profile' style={{ height: 53, width: 36 , display: "inline", marginRight: "10px"}} />
+                    <img src="/icons/people.svg" alt='access-profile' style={{ height: 53, width: 36 , display: "inline", marginRight: "10px"}} />
                         <Link href="/anime">
                             <a>Anime</a>
                         </Link>

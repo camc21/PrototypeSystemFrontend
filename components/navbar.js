@@ -82,7 +82,7 @@ export default function Navbar(props) {
           </div>
         </div>
 
-        <h1>Prototype System Frontend</h1>
+        <h1>Carlos Augusto Muniz Correa</h1>
 
         <div>
           <input type="checkbox" id="menu-right" />
