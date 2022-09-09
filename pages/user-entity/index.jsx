@@ -9,15 +9,16 @@ import { Column } from "primereact/column";
 import { Fieldset } from "primereact/fieldset";
 import Select from "react-select"
 
-import { AccessProfileDataService } from "../../services/AccessProfileDataService";
+import { UserEntityDataService } from "../../services/UserEntityDataService";
 import withAuth from "../../components/withAuth";
-import { loadAccessProfileSelectedAction, loadAccessProfileListAction } from "../../store/actions/accessProfile";
+import { loadUserEntitySelectedAction, loadUserEntityListAction } from "../../store/actions/userEntity";
 
 
 
-function AccessProfile(props) {
+function UserEntity(props) {
 
-    const [accessProfilePage, setAccessProfilePage] = useState(useSelector((state) => state.accessProfileListReducer.accessProfilePage));
+    const [userEntityPage, setUserEntityPage] = useState(useSelector((state) => state.userEntityListReducer.userEntityPage));
+
     const [selectedLocalData, setSelectedLocalData] = useState(null);
 
     const [itensPerPage, setItensPage] = useState([
@@ -30,21 +31,9 @@ function AccessProfile(props) {
     const [sortBy, setSortBy] = useState("name");
     const [numberPage, setNumberPage] = useState(0);
 
-
     const toast = useRef(null);
 
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        return () => {
-            setAccessProfilePage(null);
-            setItensPage(null);
-            setRows(null);
-            setSortBy(null);
-            setNumberPage(null);
-        }
-    }, [])
-
 
 
     useEffect(() => {
@@ -52,7 +41,7 @@ function AccessProfile(props) {
     }, [rows, numberPage])
 
     function page(pageNo, pageSize, sortBy) {
-        AccessProfileDataService._page(pageNo, pageSize, sortBy).then(response => {
+        UserEntityDataService._page(pageNo, pageSize, sortBy).then(response => {
             const responseAux = {
                 content: response.data.content,
                 empty: response.data.empty,
@@ -64,11 +53,10 @@ function AccessProfile(props) {
                 totalElements: response.data.totalElements,
                 totalPages: response.data.totalPages
             }
-            dispatch(loadAccessProfileListAction(responseAux));
-            setAccessProfilePage(responseAux);
+            dispatch(loadUserEntityListAction(responseAux));
+            setUserEntityPage(responseAux);
         }).catch(error => {
-            console.log(error.response.data);
-            if (error.response.data.message.indexOf("Perfil de Acesso") === -1) {
+            if (error.response.data.message.indexOf("Usuário") === -1) {
                 toast.current.show({ severity: "warn", summary: "Aviso", detail: "Servidor indisponível, contate o administrador", life: 3000 });
             } else {
                 switch (error.response.status) {
@@ -87,37 +75,39 @@ function AccessProfile(props) {
     }
 
     const novo = () => {
-        dispatch(loadAccessProfileSelectedAction(null));
+        dispatch(loadUserEntitySelectedAction(null));
     }
 
-    const _delete = (rowData) => {
-        const index = accessProfilePage.content.indexOf(rowData);
-        AccessProfileDataService._delete(rowData.id).then(response => {
-            toast.current.show({ severity: "error", summary: "Erro", detail: "Perfil de Acesso " + rowData.nome + " excluído com sucesso!", life: 3000 });
+    const _delete = (idUserEntity) => {
+        UserEntityDataService._delete(idUserEntity).then(response => {
+            toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro excluído com sucesso!", life: 3000 });
+            setTimeout(() => {
+                console.log("EXECUTADO DELETE");
+            }, 3000);
             page(numberPage, rows.value, sortBy);
         }).catch(error => {
-            toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
+            console.log(error);
         })
     }
 
     const actionBodyTemplate = (rowData) => {
         return (
             <>
-                <Link href="/accessProfile/form">
-                    <Button style={{ marginRight: "10px" }} icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" disabled={!selectedLocalData || rowData.id !== selectedLocalData.id} />
+                <Link href="/user-entity/form">
+                    <Button style={{ marginRight: "10px" }} icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" disabled={!selectedLocalData || rowData.idUserEntity !== selectedLocalData.idUserEntity} />
                 </Link>
 
-                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => _delete(rowData)} disabled={!selectedLocalData || rowData.id !== selectedLocalData.id} />
+                <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => _delete(rowData.idUserEntity)} disabled={!selectedLocalData || rowData.idUserEntity !== selectedLocalData.idUserEntity} />
             </>
         );
     }
 
     function selectLocalData(e) {
         if (e && e.value) {
-            dispatch(loadAccessProfileSelectedAction(e.value));
+            dispatch(loadUserEntitySelectedAction(e.value));
             setSelectedLocalData(e.value);
         } else {
-            dispatch(loadAccessProfileSelectedAction(null));
+            dispatch(loadUserEntitySelectedAction(null));
             setSelectedLocalData(null);
         }
 
@@ -144,25 +134,25 @@ function AccessProfile(props) {
             return (
                 <React.Fragment>
                     <span className="mx-1" style={{ color: "var(--text-color)", userSelect: "none" }}>Itens por página: </span>
-                    <Select options={itensPerPage} value={rows} onChange={(e) => handleItemPerPage(e)} isDisabled={!accessProfilePage} />
+                    <Select options={itensPerPage} value={rows} onChange={(e) => handleItemPerPage(e)} isDisabled={!userEntityPage} />
                 </React.Fragment>
             );
         },
         "CurrentPageReport": () => {
             return (
                 <span style={{ color: "var(--text-color)", userSelect: "none", width: "120px", textAlign: "center" }}>
-                    {accessProfilePage && accessProfilePage.number + 1} - {accessProfilePage && accessProfilePage.numberOfElements} de {accessProfilePage && accessProfilePage.totalElements}
+                    {userEntityPage && userEntityPage.number + 1} - {userEntityPage && userEntityPage.numberOfElements} de {userEntityPage && userEntityPage.totalElements}
                 </span>
             )
         },
         "PrevPageLink": () => {
             return (
-                <Button label="Anterior" onClick={() => numberPageMinus(numberPage)} disabled={!accessProfilePage || accessProfilePage.first} style={{ marginRight: "10px" }} />
+                <Button label="Anterior" onClick={() => numberPageMinus(numberPage)} disabled={!userEntityPage || userEntityPage.first} style={{ marginRight: "10px" }} />
             )
         },
         "NextPageLink": () => {
             return (
-                <Button label="Próximo" onClick={() => numberPageSum(numberPage)} disabled={!accessProfilePage || accessProfilePage.last} />
+                <Button label="Próximo" onClick={() => numberPageSum(numberPage)} disabled={!userEntityPage || userEntityPage.last} />
             )
         },
     };
@@ -170,20 +160,20 @@ function AccessProfile(props) {
     return (
         <>
             <Toast ref={toast} />
-            <Fieldset legend="Lista de Perfis">
+            <Fieldset legend="Lista de Usuários">
 
-                <Link href="/accessProfile/form">
+                <Link href="/user-entity/form">
                     <Button id="new-button" label="Novo" onClick={() => novo({})} />
                 </Link>
 
                 <DataTable
                     scrollHeight="400px"
                     scrollable
-                    header="Perfis de Acesso Cadastrados"
-                    value={accessProfilePage && accessProfilePage.content}
+                    header="Usuários Cadastrados"
+                    value={userEntityPage && userEntityPage.content}
+                    dataKey="idUserEntity"
                     selection={selectedLocalData}
                     onSelectionChange={e => selectLocalData(e)}
-                    dataKey="id"
                     paginator
                     paginatorTemplate={template}
                     first={numberPage}
@@ -192,7 +182,8 @@ function AccessProfile(props) {
                 >
                     <Column header="Selecionado" selectionMode="single" headerStyle={{ width: "3em" }}></Column>
                     <Column field="name" header="Nome" sortable></Column>
-                    <Column field="description" header="Descrição" sortable></Column>
+                    <Column field="email" header="E-mail" sortable></Column>
+                    <Column field="accessProfilesText" header="Perfis de Acesso" sortable></Column>
                     <Column body={actionBodyTemplate}></Column>
                 </DataTable>
 
@@ -205,4 +196,4 @@ function AccessProfile(props) {
     )
 }
 
-export default withAuth(AccessProfile);
+export default withAuth(UserEntity);

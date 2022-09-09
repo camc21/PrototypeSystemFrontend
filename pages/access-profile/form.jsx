@@ -95,7 +95,7 @@ function AccessProfileForm(props) {
                 toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro criado com sucesso!", life: 5000 });
                 setTimeout(() => {
                     console.log("EXECUTADO POST");
-                    router.push("/accessProfile");
+                    router.push("/access-profile");
                 }, 3000);
             })
         } else {
@@ -103,7 +103,7 @@ function AccessProfileForm(props) {
                 toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro alterado com sucesso!", life: 5000 });
                 setTimeout(() => {
                     console.log("EXECUTADO PUT");
-                    router.push("/accessProfile");
+                    router.push("/access-profile");
                 }, 3000);
             })
         }
@@ -233,7 +233,7 @@ function AccessProfileForm(props) {
 
 
 
-                <Link href="/accessProfile">
+                <Link href="/access-profile">
                     <Button id="back-button" style={{ marginRight: "15px" }} label="Voltar" />
                 </Link>
 

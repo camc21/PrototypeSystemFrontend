@@ -59,7 +59,7 @@ function UserEntityForm(props) {
                 toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro criado com sucesso!", life: 3000 });
                 setTimeout(() => {
                     console.log("EXECUTADO POST");
-                    router.push("/userEntity");
+                    router.push("/user-entity");
                 }, 3000);
             }).catch(error => {
                 console.log(error);
@@ -69,7 +69,7 @@ function UserEntityForm(props) {
                 toast.current.show({ severity: "success", summary: "Sucesso", detail: "Registro alterado com sucesso!", life: 3000 });
                 setTimeout(() => {
                     console.log("EXECUTADO PUT");
-                    router.push("/userEntity");
+                    router.push("/user-entity");
                 }, 3000);
             }).catch(error => {
                 console.log(error);
@@ -257,7 +257,7 @@ function UserEntityForm(props) {
                         </DataTable>
                     </div>
 
-                    <Link href="/userEntity">
+                    <Link href="/user-entity">
                         <Button type="button" id="buttonBack" style={{ marginRight: "15px" }} label="Voltar" />
                     </Link>
 
