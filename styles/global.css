@@ -102,7 +102,7 @@ nav > div > div {
   cursor: pointer;
 }
 .menu-bt:before {
-  display: block;
+  display: none;
   line-height: initial;
   width: 24px;
   height: 24px;

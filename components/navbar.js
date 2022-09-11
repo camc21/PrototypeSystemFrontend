@@ -1,6 +1,7 @@
 import {React, useState, useEffect } from 'react';
 import Link from 'next/link'
 import { useSelector, useDispatch } from "react-redux";
+import 'primeicons/primeicons.css';
 
 //styles
 // import '../styles/navbar.css';
@@ -58,7 +59,7 @@ export default function Navbar(props) {
       <nav>
         <div>
           <input type="checkbox" id="menu-left" />
-          <label htmlFor="menu-left"  className="menu-bt left"></label>
+          <label htmlFor="menu-left"  className="menu-bt left"><i className="pi pi-bars"></i></label>
           <div className="nav-menu left">
             <div className="menu-scroll">
               <h5>Administrativo</h5>
@@ -86,7 +87,8 @@ export default function Navbar(props) {
 
         <div>
           <input type="checkbox" id="menu-right" />
-          <label htmlFor="menu-right" className="menu-bt right" />
+          
+          <label htmlFor="menu-right" className="menu-bt right"><i className="pi pi-bars"></i></label>
           <div className="nav-menu right">
             <div className="menu-scroll">
               <h5>Meus Dados</h5>
