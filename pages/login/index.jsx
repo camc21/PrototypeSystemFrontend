@@ -63,7 +63,14 @@ function Login(props) {
                     dispatch(showButtonLoginAction(false));
                     router.push('/');
                 }
-            });
+            }).catch(error => {
+                if (error.response.data.message.includes("401")) {
+                    toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
+                } else {
+                    toast.current.show({ severity: "warn", summary: "Aviso", detail: "Erro no sistema, contate o administrador", life: 3000 });
+                }
+                setLoadingCredentials(false);
+            })
         } else {
             toast.current.show({ severity: "warn", summary: "Aviso", detail: "Preencha os campos, E-mail e Senha", life: 3000 });
             setLoadingCredentials(false);
