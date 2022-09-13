@@ -67,21 +67,10 @@ function AccessProfile(props) {
             dispatch(loadAccessProfileListAction(responseAux));
             setAccessProfilePage(responseAux);
         }).catch(error => {
-            console.log(error.response.data);
-            if (error.response.data.message.indexOf("Perfil de Acesso") === -1) {
-                toast.current.show({ severity: "warn", summary: "Aviso", detail: "Servidor indisponível, contate o administrador", life: 3000 });
+            if (error.response.data.message.includes("403")) {
+                toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
             } else {
-                switch (error.response.status) {
-                    case 401:
-                        toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
-                        break;
-                    case 404:
-                        toast.current.show({ severity: "warn", summary: "Aviso", detail: "Serviço indisponível", life: 3000 });
-                        break;
-                    default:
-                        toast.current.show({ severity: "warn", summary: "Aviso", detail: "Erro no sistema, contate o administrador", life: 3000 });
-                        break;
-                }
+                toast.current.show({ severity: "warn", summary: "Aviso", detail: "Erro no sistema, contate o administrador", life: 3000 });
             }
         })
     }
