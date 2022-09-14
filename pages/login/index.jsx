@@ -53,7 +53,7 @@ function Login(props) {
         if (data.email !== "" && data.password !== "") {
             LoginDataService.logIn(data.email, data.password).then(response => {
                 if (response.data.code > 300) {
-                    toast.current.show({ severity: "warn", summary: "Aviso", detail: response.data.message, life: 3000 });
+                    toast.current.show({ severity: "warn", summary: "Aviso", detail: response.data.message, life: 15000 });
                     setVisible(true);
                     setLoadingCredentials(false);
                 } else {
@@ -65,14 +65,14 @@ function Login(props) {
                 }
             }).catch(error => {
                 if (error.response.data.message.includes("401")) {
-                    toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 3000 });
+                    toast.current.show({ severity: "warn", summary: "Aviso", detail: error.response.data.message, life: 15000 });
                 } else {
                     toast.current.show({ severity: "warn", summary: "Aviso", detail: "Erro no sistema, contate o administrador", life: 3000 });
                 }
                 setLoadingCredentials(false);
             })
         } else {
-            toast.current.show({ severity: "warn", summary: "Aviso", detail: "Preencha os campos, E-mail e Senha", life: 3000 });
+            toast.current.show({ severity: "warn", summary: "Aviso", detail: "Preencha os campos, E-mail e Senha", life: 15000 });
             setLoadingCredentials(false);
         }
     }
@@ -126,7 +126,7 @@ function Login(props) {
                             />
                         )}
                     />
-                    <Button style={{marginTop: "20px", backgroundColor: "#fff", color: "#000", fontWeight: "bold"}} type="submit" label="Entrar" />
+                    <Button id='btnEntrar' style={{marginTop: "20px", backgroundColor: "#fff", color: "#000", fontWeight: "bold"}} type="submit" label="Entrar" />
                     {loadingCredentials &&
                         <ProgressSpinner />
                     }

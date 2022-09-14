@@ -103,14 +103,14 @@ export default function Navbar(props) {
               {
                 showLogin &&
                 <Link href="/login">
-                  <a onClick={logIn}>Login</a>
+                  <a id='linkLogin' onClick={logIn}>Login</a>
                 </Link>
               }
             
               {
                 !showLogin &&
                 <Link href="/">
-                  <a onClick={logOut}>Logout</a>
+                  <a id='linkLogout' onClick={logOut}>Logout</a>
                 </Link>
               }
             </div>
