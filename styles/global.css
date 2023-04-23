@@ -258,4 +258,7 @@ Media Queries
   margin-top: 15px;
 }
 
+.leaflet-control-attribution {
+  display: none;
+}
 

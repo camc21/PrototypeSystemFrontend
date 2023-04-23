@@ -37,6 +37,7 @@
     "react-leaflet": "^3.2.5",
     "react-redux": "^7.2.4",
     "react-select": "^5.2.2",
+    "react-split-pane": "^2.0.3",
     "react-spring": "^9.2.4",
     "react-transition-group": "^4.4.2",
     "reactstrap": "^9.0.1",

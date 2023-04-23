@@ -1,0 +1,40 @@
+.homeMap {
+  width: 100%;
+  height: 100%;
+}
+
+.map_one {
+  border: 1px solid black;
+  background-color: red;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.map_two {
+  border: 1px solid black;
+  background-color: green;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.map_three {
+  border: 1px solid black;
+  background-color: blue;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.map_four {
+  border: 1px solid black;
+  background-color: purple;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.leaflet-bottom {
+  display: none !important;
+}
